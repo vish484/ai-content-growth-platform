@@ -3,7 +3,8 @@ ClipSync — Vercel Serverless API
 Phase 1: YouTube URL Validator
 
 This file lives at /api/index.py in the project root.
-Vercel's Python runtime serves it at /api/* routes.
+Vercel's Python runtime passes the full request path to the ASGI app,
+so all routes are registered under the /api prefix via APIRouter.
 """
 
 import os
@@ -12,8 +13,6 @@ import logging
 from typing import Optional
 
 # ── SSL certificates ───────────────────────────────────────────
-# On Linux (Vercel), system certs work fine.
-# On macOS dev, certifi is needed.
 try:
     import certifi
     os.environ.setdefault('SSL_CERT_FILE', certifi.where())
@@ -23,7 +22,7 @@ except ImportError:
 # ───────────────────────────────────────────────────────────────
 
 import yt_dlp
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, APIRouter, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from mangum import Mangum
@@ -52,11 +51,20 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Vercel's Python runtime wraps requests in a Lambda-like event, so Mangum
-# works correctly here. api_gateway_base_path="/api" tells Mangum to strip
-# the /api prefix before passing the path to FastAPI, so a request for
-# /api/validate-url becomes /validate-url and matches @app.post("/validate-url").
-handler = Mangum(app, lifespan="off", api_gateway_base_path="/api")
+# ─────────────────────────────────────────────
+#  Router — ALL routes carry the /api prefix
+# ─────────────────────────────────────────────
+# Vercel passes the full URL path (e.g. /api/validate-url) directly to the
+# ASGI app without stripping any prefix. Using prefix="/api" on the router
+# ensures every route matches exactly what Vercel sends.
+router = APIRouter(prefix="/api")
+
+# ─────────────────────────────────────────────
+#  Mangum adapter
+# ─────────────────────────────────────────────
+# Kept for compatibility in case Vercel invokes the function as a Lambda-style
+# handler. Do NOT use api_gateway_base_path here — routes already include /api.
+handler = Mangum(app, lifespan="off")
 
 # ─────────────────────────────────────────────
 #  Schemas
@@ -101,19 +109,19 @@ def extract_video_id(url: str) -> Optional[str]:
 
 
 # ─────────────────────────────────────────────
-#  Routes
+#  Routes  (all under the /api router)
 # ─────────────────────────────────────────────
-@app.get("/")
+@router.get("/")
 def root():
     return {"service": "ClipSync API", "version": "0.1.0", "status": "healthy"}
 
 
-@app.get("/health")
+@router.get("/health")
 def health():
     return {"status": "ok"}
 
 
-@app.post("/validate-url", response_model=VideoMetadata)
+@router.post("/validate-url", response_model=VideoMetadata)
 def validate_url(payload: ValidateUrlRequest):
     """
     Validate a YouTube URL and return rich video metadata.
@@ -197,3 +205,7 @@ def validate_url(payload: ValidateUrlRequest):
         upload_date=upload_date,
         description_snippet=description_snippet,
     )
+
+
+# Register the router with the main app AFTER all route definitions
+app.include_router(router)
