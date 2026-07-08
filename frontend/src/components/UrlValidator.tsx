@@ -1,10 +1,10 @@
 import { useState, useRef, useCallback } from 'react';
 import './UrlValidator.css';
 
-// Always use a relative path so requests stay on the same domain (no CORS preflight).
-// On Vercel, /api/validate-url is routed to api/index.py by vercel.json rewrites.
-// In local dev, vite.config.ts proxies /api/* to http://localhost:8000.
-const API_URL = '/api/validate-url';
+// Reads from Vercel Environment Variables. If not set, falls back to a relative path.
+// This allows you to host the frontend on Vercel and the backend on Railway.
+const BASE_URL = import.meta.env.VITE_API_URL || '';
+const API_URL = BASE_URL ? `${BASE_URL}/api/validate-url` : '/api/validate-url';
 
 
 interface VideoMeta {
