@@ -41,7 +41,6 @@ app = FastAPI(
     title="ClipSync API",
     description="AI Content Growth Platform — YouTube processing pipeline",
     version="0.1.0",
-    root_path="/api",
 )
 
 # CORS — allow any origin in production (Vercel frontend + custom domains)
@@ -53,7 +52,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Vercel's ASGI adapter — wraps FastAPI for the serverless runtime
+# Vercel's ASGI adapter — wraps FastAPI for the serverless runtime.
+# Do NOT set api_gateway_base_path here; that is an AWS API Gateway concept
+# and is not applicable to Vercel. Vercel passes the full path as-is.
 handler = Mangum(app, lifespan="off")
 
 # ─────────────────────────────────────────────
