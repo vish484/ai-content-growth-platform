@@ -41,6 +41,7 @@ app = FastAPI(
     title="ClipSync API",
     description="AI Content Growth Platform — YouTube processing pipeline",
     version="0.1.0",
+    root_path="/api",
 )
 
 # CORS — allow any origin in production (Vercel frontend + custom domains)
