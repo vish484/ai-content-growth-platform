@@ -1,10 +1,10 @@
 import { useState, useRef, useCallback } from 'react';
 import './UrlValidator.css';
 
-// In local dev: VITE_API_URL=http://localhost:8000 (from .env.local)
-// On Vercel: falls back to relative /api (routes to the serverless function)
-const BASE_URL = import.meta.env.VITE_API_URL ?? '';
-const API_URL  = `${BASE_URL}/api/validate-url`;
+// Always use a relative path so requests stay on the same domain (no CORS preflight).
+// On Vercel, /api/validate-url is routed to api/index.py by vercel.json rewrites.
+// In local dev, vite.config.ts proxies /api/* to http://localhost:8000.
+const API_URL = '/api/validate-url';
 
 
 interface VideoMeta {
