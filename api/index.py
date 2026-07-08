@@ -41,7 +41,6 @@ app = FastAPI(
     title="ClipSync API",
     description="AI Content Growth Platform — YouTube processing pipeline",
     version="0.1.0",
-    root_path="/api",
 )
 
 # CORS — allow any origin in production (Vercel frontend + custom domains)
@@ -53,10 +52,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Vercel's ASGI adapter — wraps FastAPI for the serverless runtime.
-# Do NOT set api_gateway_base_path here; that is an AWS API Gateway concept
-# and is not applicable to Vercel. Vercel passes the full path as-is.
-handler = Mangum(app, lifespan="off")
+# Vercel's Python runtime wraps requests in a Lambda-like event, so Mangum
+# works correctly here. api_gateway_base_path="/api" tells Mangum to strip
+# the /api prefix before passing the path to FastAPI, so a request for
+# /api/validate-url becomes /validate-url and matches @app.post("/validate-url").
+handler = Mangum(app, lifespan="off", api_gateway_base_path="/api")
 
 # ─────────────────────────────────────────────
 #  Schemas
