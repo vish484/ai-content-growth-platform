@@ -12,7 +12,7 @@ export default defineConfig({
     // This mirrors how Vercel routes /api/* to the serverless function.
     proxy: {
       '/api': {
-        target: 'http://localhost:8000',
+        target: 'https://ai-content-growth-platform-production.up.railway.app',
         changeOrigin: true,
         // Rewrite: /api/validate-url → /api/validate-url (no change needed)
       },

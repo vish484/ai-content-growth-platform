@@ -1,10 +1,8 @@
 import { useState, useRef, useCallback } from 'react';
 import './UrlValidator.css';
 
-// Reads from Vercel Environment Variables. If not set, falls back to a relative path.
-// This allows you to host the frontend on Vercel and the backend on Railway.
-const BASE_URL = import.meta.env.VITE_API_URL || '';
-const API_URL = BASE_URL ? `${BASE_URL}/api/validate-url` : '/api/validate-url';
+// Hardcoded directly to the Railway backend to avoid Vercel environment variable caching issues.
+const API_URL = 'https://ai-content-growth-platform-production.up.railway.app/api/validate-url';
 
 
 interface VideoMeta {
