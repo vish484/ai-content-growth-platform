@@ -1,0 +1,121 @@
+/* ═══ Navbar ═══ */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 20px 40px;
+  transition: all 0.4s var(--ease-smooth);
+}
+
+.navbar--scrolled {
+  background: rgba(5, 8, 16, 0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--clr-border-dim);
+  padding: 14px 40px;
+}
+
+.navbar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xl);
+}
+
+/* Logo */
+.navbar__logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--clr-text-primary);
+  letter-spacing: -0.02em;
+  transition: opacity 0.2s;
+}
+
+.navbar__logo:hover { opacity: 0.85; }
+
+.navbar__logo-icon {
+  font-size: 18px;
+  color: var(--clr-violet-light);
+  animation: glow-pulse 3s ease-in-out infinite;
+  display: inline-block;
+}
+
+.navbar__logo-accent {
+  color: var(--clr-violet-light);
+}
+
+/* Links */
+.navbar__links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xl);
+}
+
+.navbar__link {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--clr-text-secondary);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.2s;
+  letter-spacing: 0.01em;
+}
+
+.navbar__link:hover { color: var(--clr-text-primary); }
+
+.navbar__link--dim { opacity: 0.6; }
+
+.navbar__link-tag {
+  font-size: 9px;
+  padding: 2px 6px;
+}
+
+/* CTA */
+.navbar__cta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 20px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, var(--clr-violet), #5b21b6);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.2s var(--ease-bounce),
+              box-shadow 0.2s var(--ease-smooth),
+              opacity 0.2s;
+  font-family: var(--font-display);
+}
+
+.navbar__cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(124, 58, 237, 0.4);
+}
+
+.navbar__cta-arrow {
+  transition: transform 0.2s var(--ease-smooth);
+}
+
+.navbar__cta:hover .navbar__cta-arrow {
+  transform: translateX(3px);
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 16px 20px;
+  }
+  .navbar__links {
+    display: none;
+  }
+}

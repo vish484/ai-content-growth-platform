@@ -1,0 +1,212 @@
+/* ═══ Hero Section ═══ */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding-top: 100px;
+  --mx: 0px;
+  --my: 0px;
+}
+
+/* Ambient Orbs */
+.hero__orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  transition: transform 0.6s ease-out;
+}
+
+.hero__orb--violet {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(124, 58, 237, 0.25) 0%, transparent 70%);
+  top: -100px;
+  right: -200px;
+  transform: translate(var(--mx), var(--my));
+}
+
+.hero__orb--cyan {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.15) 0%, transparent 70%);
+  bottom: 0;
+  left: -100px;
+  transform: translate(calc(var(--mx) * -0.5), calc(var(--my) * -0.5));
+}
+
+/* Grid Overlay */
+.hero__grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(124, 58, 237, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124, 58, 237, 0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 30%, transparent 100%);
+  pointer-events: none;
+}
+
+/* Content */
+.hero__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-lg);
+}
+
+/* Badge Row */
+.hero__badge-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s var(--ease-expo), transform 0.6s var(--ease-expo);
+  transition-delay: 0.1s;
+}
+
+.hero--visible .hero__badge-row {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hero__status-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hero__status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--clr-green);
+  position: relative;
+  display: inline-block;
+}
+
+.hero__status-dot::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  background: var(--clr-green);
+  opacity: 0.4;
+  animation: ping 1.5s ease-in-out infinite;
+}
+
+.hero__badge-divider {
+  display: inline-block;
+  width: 1px;
+  height: 16px;
+  background: var(--clr-border-dim);
+}
+
+/* Headline */
+.hero__headline {
+  font-size: clamp(36px, 6vw, 72px);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: var(--clr-text-primary);
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s var(--ease-expo), transform 0.7s var(--ease-expo);
+  transition-delay: 0.2s;
+  max-width: 800px;
+}
+
+.hero--visible .hero__headline {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Subtext */
+.hero__sub {
+  font-size: clamp(14px, 1.5vw, 17px);
+  color: var(--clr-text-secondary);
+  max-width: 560px;
+  line-height: 1.7;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.7s var(--ease-expo), transform 0.7s var(--ease-expo);
+  transition-delay: 0.3s;
+}
+
+.hero--visible .hero__sub {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Pills */
+.hero__pills {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  justify-content: center;
+}
+
+.hero__pill {
+  font-size: 12px;
+  padding: 6px 14px;
+  gap: 6px;
+  opacity: 0;
+  transform: translateY(12px) scale(0.95);
+  animation: none;
+  transition: transform 0.2s var(--ease-bounce),
+              box-shadow 0.2s;
+}
+
+.hero--visible .hero__pill {
+  animation: slide-up-fade 0.5s var(--ease-expo) forwards;
+}
+
+.hero__pill:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 4px 16px rgba(124, 58, 237, 0.3);
+}
+
+/* Scroll hint */
+.hero__scroll-hint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-xl);
+  opacity: 0;
+  transition: opacity 0.8s var(--ease-expo);
+  transition-delay: 0.8s;
+}
+
+.hero--visible .hero__scroll-hint {
+  opacity: 1;
+}
+
+.hero__scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, transparent, var(--clr-violet), transparent);
+  animation: float-up 2s ease-in-out infinite alternate;
+}
+
+.hero__scroll-label {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--clr-text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding-top: 80px;
+    min-height: 90vh;
+  }
+}
